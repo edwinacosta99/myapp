@@ -12,6 +12,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
+  bool _obscurePassword = true;
+  bool _obscureConfirmPassword = true;
 
   void _register() {
     if (_formKey.currentState?.validate() ?? false) {
@@ -36,9 +38,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
             children: <Widget>[
               TextFormField(
                 controller: _nameController,
-                decoration: InputDecoration(labelText: 'Nombre'),
+                decoration: InputDecoration(
+                  labelText: 'Nombre',
+                  icon: Icon(Icons.person),
+                ),
                 validator: (value) {
-                  if (value == null || value.length < 3 || value.length > 11) {
+                  if (value == null || value.length < 3 || value.length > 12) {
                     return 'El nombre debe tener entre 3 y 10 caracteres';
                   }
                   return null;
@@ -46,17 +51,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               TextFormField(
                 controller: _emailController,
-                decoration: InputDecoration(labelText: 'Correo'),
+                decoration: InputDecoration(
+                  labelText: 'Correo',
+                  icon: Icon(Icons.email),
+                ),
                 validator: (value) {
-                  if (value == null || !RegExp(r'^[a-zA-Z0-9._%+-]+@example\.edu\.hn$').hasMatch(value)) {
-                    return 'Ingrese un correo válido, debe finalizar con .edu.hn.';
+                  if (value == null || !RegExp(r'^[a-zA-Z0-9._%+-]+@unah\.edu\.hn$').hasMatch(value)) {
+                    return 'Ingrese un correo válido';
                   }
                   return null;
                 },
               ),
               TextFormField(
                 controller: _phoneController,
-                decoration: InputDecoration(labelText: 'Teléfono'),
+                decoration: InputDecoration(
+                  labelText: 'Teléfono',
+                  icon: Icon(Icons.phone),
+                ),
                 validator: (value) {
                   if (value == null || !RegExp(r'^[39]\d{7}$').hasMatch(value)) {
                     return 'El teléfono debe iniciar con 3 o 9 y tener 8 dígitos';
@@ -66,8 +77,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               TextFormField(
                 controller: _passwordController,
-                decoration: InputDecoration(labelText: 'Contraseña'),
-                obscureText: true,
+                decoration: InputDecoration(
+                  labelText: 'Contraseña',
+                  icon: Icon(Icons.lock),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _obscurePassword ? Icons.visibility : Icons.visibility_off,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _obscurePassword = !_obscurePassword;
+                      });
+                    },
+                  ),
+                ),
+                obscureText: _obscurePassword,
                 validator: (value) {
                   if (value == null || !RegExp(r'^(?=.*[A-Z])(?=.*[!@#$&*]).{8,}$').hasMatch(value)) {
                     return 'Debe tener al menos 8 caracteres, una mayúscula y un carácter especial';
@@ -77,8 +101,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               TextFormField(
                 controller: _confirmPasswordController,
-                decoration: InputDecoration(labelText: 'Confirmar Contraseña'),
-                obscureText: true,
+                decoration: InputDecoration(
+                  labelText: 'Confirmar Contraseña',
+                  icon: Icon(Icons.lock),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _obscureConfirmPassword ? Icons.visibility : Icons.visibility_off,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _obscureConfirmPassword = !_obscureConfirmPassword;
+                      });
+                    },
+                  ),
+                ),
+                obscureText: _obscureConfirmPassword,
                 validator: (value) {
                   if (value != _passwordController.text) {
                     return 'Las contraseñas no coinciden';

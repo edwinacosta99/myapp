@@ -11,10 +11,12 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _obscurePassword = true;
+  //bool _obscureConfirmPassword = true;
 
   void _login() {
     if (_formKey.currentState?.validate() ?? false) {
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) => HomeScreen(email: _emailController.text),
@@ -22,7 +24,6 @@ class _LoginScreenState extends State<LoginScreen> {
       );
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,9 +38,13 @@ class _LoginScreenState extends State<LoginScreen> {
             children: <Widget>[
               TextFormField(
                 controller: _emailController,
-                decoration: InputDecoration(labelText: 'Correo Institucional:'),
+                decoration: InputDecoration(
+                    labelText: 'Correo Institucional:',
+                    icon: Icon(Icons.email)),
                 validator: (value) {
-                  if (value == null || !RegExp(r'^[a-zA-Z0-9._%+-]+@unah\.edu\.hn$').hasMatch(value)) {
+                  if (value == null ||
+                      !RegExp(r'^[a-zA-Z0-9._%+-]+@unah\.edu\.hn$')
+                          .hasMatch(value)) {
                     return 'Ingrese un correo válido';
                   }
                   return null;
@@ -47,11 +52,23 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               TextFormField(
                 controller: _passwordController,
-                decoration: InputDecoration(labelText: 'Contraseña:'),
-                obscureText: true,
+                decoration: InputDecoration(
+                labelText: 'Contraseña:', icon: Icon(Icons.lock),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    _obscurePassword ? Icons.visibility : Icons.visibility_off,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _obscurePassword = !_obscurePassword;
+                    });
+                  },
+                ),
+                ),
+                obscureText: _obscurePassword,
                 validator: (value) {
                   if (value == null || value.length != 8) {
-                    return 'Ingrese su número de cuenta (8 dígitos)';
+                    return 'Ingrese su número de cuenta (al menos 8 dígitos)';
                   }
                   return null;
                 },
@@ -61,14 +78,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 onPressed: _login,
                 child: Text('Iniciar Sesión'),
               ),
-              TextButton(
+              ElevatedButton(
                 onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => RegisterScreen()),
                   );
                 },
-                child: Text('Registrarse!'),
+                child: Text('Registrate!'),
               ),
             ],
           ),
