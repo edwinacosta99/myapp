@@ -1,4 +1,4 @@
-# MyAPPHOme
+# MyAPPHome
 
 A new Flutter project.
 
