@@ -32,62 +32,84 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: <Widget>[
-              TextFormField(
-                controller: _emailController,
-                decoration: InputDecoration(
-                    labelText: 'Correo Institucional:',
-                    icon: Icon(Icons.email)),
-                validator: (value) {
-                  if (value == null ||
-                      !RegExp(r'^[a-zA-Z0-9._%+-]+@unah\.edu\.hn$')
-                          .hasMatch(value)) {
-                    return 'Ingrese un correo válido';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _passwordController,
-                decoration: InputDecoration(
-                labelText: 'Contraseña:', icon: Icon(Icons.lock),
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    _obscurePassword ? Icons.visibility : Icons.visibility_off,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _obscurePassword = !_obscurePassword;
-                    });
+        child: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: <Widget>[
+                TextFormField(
+                  controller: _emailController,
+                  decoration: InputDecoration(
+                      labelText: 'Correo Institucional:',
+                      icon: Icon(Icons.email)),
+                  validator: (value) {
+                    if (value == null ||
+                        !RegExp(r'^[a-zA-Z0-9._%+-]+@unah\.edu\.hn$')
+                            .hasMatch(value)) {
+                      return 'Ingrese un correo válido';
+                    }
+                    return null;
                   },
                 ),
+                SizedBox(height: 50),
+                TextFormField(
+                  controller: _passwordController,
+                  decoration: InputDecoration(
+                  labelText: 'Contraseña:', icon: Icon(Icons.lock),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _obscurePassword ? Icons.visibility : Icons.visibility_off,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _obscurePassword = !_obscurePassword;
+                      });
+                    },
+                  ),
+                  ),
+                  obscureText: _obscurePassword,
+                  validator: (value) {
+                    if (value == null || value.length != 11) {
+                      return 'Ingrese su número de cuenta';
+                    }
+                    return null;
+                  },
                 ),
-                obscureText: _obscurePassword,
-                validator: (value) {
-                  if (value == null || value.length != 8) {
-                    return 'Ingrese su número de cuenta (al menos 8 dígitos)';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _login,
-                child: Text('Iniciar Sesión'),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => RegisterScreen()),
-                  );
-                },
-                child: Text('Registrate!'),
-              ),
-            ],
+                SizedBox(height: 50),
+                ElevatedButton(
+                  onPressed: _login,
+                  style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue, // Cambia a tu color preferido
+                  ),
+                  child: const Text('Iniciar Sesión',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                  ),
+                ),
+                SizedBox(height: 50),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => RegisterScreen()),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue, // Cambia a tu color preferido
+                  ),
+                  child: const Text('¡Regístrate!',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                  ),
+                  ),
+              ],
+            ),
           ),
         ),
       ),
